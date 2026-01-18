@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Futuristic AI Portfolio Theme */
+    --background: 230 69% 5%;
+    --foreground: 226 100% 94%;
+    
+    --card: 230 50% 10%;
+    --card-foreground: 226 100% 94%;
+    
+    --popover: 230 50% 10%;
+    --popover-foreground: 226 100% 94%;
+    
+    --primary: 187 100% 50%;
+    --primary-foreground: 230 69% 5%;
+    
+    --secondary: 262 83% 58%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 230 30% 15%;
+    --muted-foreground: 226 50% 70%;
+    
+    --accent: 334 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 187 50% 20%;
+    --input: 230 30% 15%;
+    --ring: 187 100% 50%;
+    
+    --radius: 1rem;
+    
+    /* Custom tokens */
+    --glow: 187 100% 50%;
+    --glow-purple: 262 83% 58%;
+    --ai-blue: 185 100% 50%;
+    --ai-purple: 271 91% 65%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--ai-purple)), hsl(var(--accent)));
+    --gradient-glow: 0 0 30px hsl(var(--glow) / 0.4);
+    --gradient-glow-purple: 0 0 30px hsl(var(--glow-purple) / 0.4);
+    
+    /* Card glass effect */
+    --glass-bg: hsl(230 50% 10% / 0.4);
+    --glass-border: hsl(187 50% 30% / 0.2);
+  }
+
+  .light {
+    --background: 210 40% 98%;
+    --foreground: 230 25% 15%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 230 25% 15%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 230 25% 15%;
+    
+    --primary: 187 80% 40%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 262 70% 55%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 210 30% 92%;
+    --muted-foreground: 230 15% 40%;
+    
+    --accent: 334 80% 50%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 210 20% 85%;
+    --input: 210 30% 92%;
+    --ring: 187 80% 40%;
+    
+    --glow: 187 80% 40%;
+    --glow-purple: 262 70% 55%;
+    --ai-blue: 185 80% 45%;
+    --ai-purple: 271 70% 60%;
+    
+    --glass-bg: hsl(0 0% 100% / 0.7);
+    --glass-border: hsl(187 30% 50% / 0.2);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-accent);
+  }
+  
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  .glow-effect {
+    box-shadow: var(--gradient-glow);
+  }
+  
+  .glow-effect-purple {
+    box-shadow: var(--gradient-glow-purple);
+  }
+  
+  .glow-text {
+    text-shadow: 0 0 30px hsl(var(--glow) / 0.4);
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+  
+  @keyframes glow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+  }
+  
+  .animate-grid {
+    animation: gridMove 20s linear infinite;
+  }
+  
+  @keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+  }
+}
