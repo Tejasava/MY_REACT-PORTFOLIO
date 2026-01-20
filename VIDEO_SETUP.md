@@ -7,11 +7,12 @@ The profile photo component is now configured to play an introduction video when
 ### Step 1: Prepare Your Video
 - Create or record your introduction video (recommended: 10-20 seconds)
 - Export it as an MP4 file for best compatibility
+- **IMPORTANT: Keep file size under 10MB** (GitHub has 100MB limit, but smaller = faster loading)
 - Optimize the video:
-  - Resolution: 720p or 1080p
-  - File size: Keep it under 10-15MB for fast loading
+  - Resolution: 720p recommended
+  - File size: **Under 10MB is ideal** (use compression below)
   - Format: MP4 (h.264 codec)
-  - Audio: Optional (can include audio or keep muted)
+  - Audio: Included (with audio now enabled!)
 
 ### Step 2: Add Video to Project
 1. Place your video file in the `public` folder with the name `intro-video.mp4`
@@ -22,6 +23,8 @@ The profile photo component is now configured to play an introduction video when
    ├── placeholder.svg
    └── intro-video.mp4  ← Add your video here
    ```
+
+**Note:** Video files are automatically ignored by git (see `.gitignore`), so they won't be committed to your repository. This prevents large files from bloating your GitHub repo.
 
 ### Step 3: How It Works
 - The video will automatically play when you hover over the profile photo
@@ -43,13 +46,11 @@ if (videoRef.current) {
 ```
 
 #### Option B: Enable audio in video
-Change the video tag from:
+**Audio is now ENABLED by default!** Your video will play with sound when users hover over the profile photo.
+
+If you want to disable audio later, you can add `muted` back to the video tag:
 ```tsx
 <video ref={videoRef} loop muted playsInline>
-```
-to:
-```tsx
-<video ref={videoRef} loop playsInline>
 ```
 
 #### Option C: Change transition speed
@@ -68,11 +69,14 @@ className={`... transition-opacity duration-300 ...`}
 
 **Using FFmpeg** (command line):
 ```bash
-# Convert and optimize video
-ffmpeg -i your-video.mov -c:v libx264 -preset medium -crf 23 -c:a aac -q:a 4 intro-video.mp4
+# Convert and optimize video (RECOMMENDED - Creates ~5-10MB file with audio)
+ffmpeg -i your-video.mov -c:v libx264 -preset slow -crf 28 -c:a aac -q:a 5 intro-video.mp4
 
-# Or for smaller file size (lower quality):
-ffmpeg -i your-video.mov -c:v libx264 -preset fast -crf 28 -c:a aac -q:a 4 intro-video.mp4
+# For smaller file size (lower quality but faster loading)
+ffmpeg -i your-video.mov -c:v libx264 -preset fast -crf 32 -c:a aac -q:a 6 intro-video.mp4
+
+# For best quality (larger file, make sure it's under 10MB)
+ffmpeg -i your-video.mov -c:v libx264 -preset slow -crf 23 -c:a aac -q:a 4 intro-video.mp4
 ```
 
 **Online Tools**:

@@ -153,7 +153,6 @@ const HeroSection = () => {
               isHovering ? 'opacity-100' : 'opacity-0'
             }`}
             loop
-            muted
             playsInline
           >
             <source src="/intro-video.mp4" type="video/mp4" />
