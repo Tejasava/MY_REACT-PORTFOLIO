@@ -23,8 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# Video files (too large for GitHub)
-public/intro-video.mp4
-*.mp4
+# Large video files (exclude files over 50MB)
+# Note: intro-video.mp4 under 10MB is committed
 *.mov
 *.webm
