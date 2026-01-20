@@ -128,7 +128,7 @@ const HeroSection = () => {
         transition={{ duration: 0.8, delay: 0.3, type: 'spring', stiffness: 100 }}
       >
         <motion.div 
-          className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden cursor-pointer relative group"
+          className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden cursor-pointer relative group flex items-center justify-center"
           whileHover={{ 
             boxShadow: '0 0 80px hsl(var(--glow) / 0.6), 0 0 150px hsl(var(--glow-purple) / 0.4)',
             scale: 1.08
@@ -149,7 +149,7 @@ const HeroSection = () => {
           {/* Introduction Video */}
           <video
             ref={videoRef}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+            className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
               isHovering ? 'opacity-100' : 'opacity-0'
             }`}
             loop
