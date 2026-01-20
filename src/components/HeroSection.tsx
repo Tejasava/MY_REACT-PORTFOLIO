@@ -23,7 +23,12 @@ const HeroSection = () => {
   const handleMouseEnter = () => {
     setIsHovering(true);
     if (videoRef.current) {
-      videoRef.current.play();
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.log('Video play error:', error);
+        });
+      }
     }
   };
 
@@ -154,9 +159,10 @@ const HeroSection = () => {
             }`}
             loop
             playsInline
+            preload="metadata"
+            onError={(e) => console.log('Video error:', e)}
           >
             <source src="/intro-video.mp4" type="video/mp4" />
-            {/* Fallback for browsers that don't support video */}
             Your browser does not support the video tag.
           </video>
 
