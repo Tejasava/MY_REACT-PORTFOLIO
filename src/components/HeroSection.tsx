@@ -155,7 +155,7 @@ const HeroSection = () => {
         transition={{ duration: 0.8, delay: 0.3, type: 'spring', stiffness: 100 }}
       >
         <motion.div 
-          className="w-[281.6px] h-[281.6px] md:w-[352px] md:h-[352px] lg:w-[422.4px] lg:h-[422.4px] rounded-full overflow-hidden cursor-pointer relative group flex items-center justify-center"
+          className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden cursor-pointer relative group flex items-center justify-center"
           whileHover={{ 
             boxShadow: '0 0 80px hsl(var(--glow) / 0.6), 0 0 150px hsl(var(--glow-purple) / 0.4)',
             scale: 1.08
