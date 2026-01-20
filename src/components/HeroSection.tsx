@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Twitter, Instagram, Trophy } from 'lucide-react';
+import { useState, useRef } from 'react';
 import profileImage from '@/assets/profile.jpg';
 
 const socialLinks = [
@@ -11,9 +12,27 @@ const socialLinks = [
 ];
 
 const HeroSection = () => {
+  const [isHovering, setIsHovering] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const scrollTo = (href: string) => {
     const element = document.querySelector(href);
     element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
   };
 
   return (
@@ -101,34 +120,58 @@ const HeroSection = () => {
         </motion.div>
       </motion.div>
 
-      {/* Profile Image */}
+      {/* Profile Image with Video Hover */}
       <motion.div
         className="mt-16 flex justify-center"
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, delay: 0.3, type: 'spring', stiffness: 100 }}
       >
-        <a
-          href="https://www.linkedin.com/in/tejasava-singh-yadav-ba8818274"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
+        <motion.div 
+          className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden cursor-pointer relative group"
+          whileHover={{ 
+            boxShadow: '0 0 80px hsl(var(--glow) / 0.6), 0 0 150px hsl(var(--glow-purple) / 0.4)',
+            scale: 1.08
+          }}
+          transition={{ duration: 0.3 }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          <motion.div 
-            className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden cursor-pointer"
-            whileHover={{ 
-              boxShadow: '0 0 80px hsl(var(--glow) / 0.6), 0 0 150px hsl(var(--glow-purple) / 0.4)',
-              scale: 1.08
-            }}
-            transition={{ duration: 0.3 }}
+          {/* Profile Image */}
+          <img
+            src={profileImage}
+            alt="Tejasava Singh Yadav"
+            className={`w-full h-full object-cover transition-opacity duration-300 ${
+              isHovering ? 'opacity-0' : 'opacity-100'
+            }`}
+          />
+          
+          {/* Introduction Video */}
+          <video
+            ref={videoRef}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+              isHovering ? 'opacity-100' : 'opacity-0'
+            }`}
+            loop
+            muted
+            playsInline
           >
-            <img
-              src={profileImage}
-              alt="Tejasava Singh Yadav"
-              className="w-full h-full object-cover"
-            />
-          </motion.div>
-        </a>
+            <source src="/intro-video.mp4" type="video/mp4" />
+            {/* Fallback for browsers that don't support video */}
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Hover Indicator */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="text-white text-center"
+            >
+              <div className="text-sm font-semibold">Hover to see intro</div>
+            </motion.div>
+          </div>
+        </motion.div>
       </motion.div>
     </section>
   );
