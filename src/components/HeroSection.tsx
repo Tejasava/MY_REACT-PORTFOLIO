@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Twitter, Instagram, Trophy } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import profileImage from '@/assets/profile.jpg';
 
 const socialLinks = [
@@ -13,6 +13,7 @@ const socialLinks = [
 
 const HeroSection = () => {
   const [isHovering, setIsHovering] = useState(false);
+  const [videoExists, setVideoExists] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const scrollTo = (href: string) => {
@@ -20,14 +21,35 @@ const HeroSection = () => {
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    // Check if video file exists
+    fetch('/intro-video.mp4', { method: 'HEAD' })
+      .then((res) => {
+        if (!res.ok) {
+          setVideoExists(false);
+          console.warn('Video file not found. Please add intro-video.mp4 to the public folder.');
+        }
+      })
+      .catch(() => {
+        setVideoExists(false);
+        console.warn('Could not fetch video file.');
+      });
+  }, []);
+
   const handleMouseEnter = () => {
     setIsHovering(true);
-    if (videoRef.current) {
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.log('Video play error:', error);
-        });
+    if (videoRef.current && videoExists) {
+      try {
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .catch((error) => {
+              console.log('Video play error:', error);
+              console.log('Make sure intro-video.mp4 is in the public folder');
+            });
+        }
+      } catch (error) {
+        console.log('Error attempting to play video:', error);
       }
     }
   };
@@ -147,35 +169,57 @@ const HeroSection = () => {
             src={profileImage}
             alt="Tejasava Singh Yadav"
             className={`w-full h-full object-cover transition-opacity duration-300 ${
-              isHovering ? 'opacity-0' : 'opacity-100'
+              isHovering && videoExists ? 'opacity-0' : 'opacity-100'
             }`}
           />
           
           {/* Introduction Video */}
-          <video
-            ref={videoRef}
-            className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
-              isHovering ? 'opacity-100' : 'opacity-0'
-            }`}
-            loop
-            playsInline
-            preload="metadata"
-            onError={(e) => console.log('Video error:', e)}
-          >
-            <source src="/intro-video.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-
-          {/* Hover Indicator */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="text-white text-center"
+          {videoExists && (
+            <video
+              ref={videoRef}
+              className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
+                isHovering ? 'opacity-100' : 'opacity-0'
+              }`}
+              loop
+              muted={false}
+              playsInline
+              preload="metadata"
+              crossOrigin="anonymous"
+              onError={(e) => {
+                console.error('Video error:', e);
+                setVideoExists(false);
+              }}
+              onCanPlay={() => {
+                console.log('Video ready to play');
+              }}
             >
-              <div className="text-sm font-semibold">Hover to see intro</div>
-            </motion.div>
-          </div>
+              <source src="/intro-video.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          )}
+
+          {/* Fallback: Show message if video doesn't exist */}
+          {!videoExists && isHovering && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+              <div className="text-white text-center text-sm px-4">
+                <p className="font-semibold">Add your video</p>
+                <p className="text-xs mt-1">Place intro-video.mp4 in public folder</p>
+              </div>
+            </div>
+          )}
+
+          {/* Hover Indicator - Show only if video exists */}
+          {videoExists && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-white text-center"
+              >
+                <div className="text-sm font-semibold">Hover to see intro</div>
+              </motion.div>
+            </div>
+          )}
         </motion.div>
       </motion.div>
     </section>
